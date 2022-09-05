@@ -7,7 +7,7 @@
 
 class Device: 
 
-    def __init__(self, manufacturer) -> None:
+    def __init__(self, manufacturer):
         self.manufacturer = manufacturer
         pass
 
@@ -16,36 +16,35 @@ class Device:
 
 class Printer(Device): 
 
-    def __init__(self, manufacturer, type) -> None:
-        self.manufacturer = manufacturer
+    def __init__(self, manufacturer, type, **throwAway):
+        super(Printer, self).__init__(manufacturer, **throwAway)
         self.type = type
-        pass
 
     def __str__(self) -> str:
-        return self.manufacturer+" "+self.type
+        return super(Printer, self).__str__() + " " + self.type
 
 class Scanner(Device):
 
-    def __init__(self, manufacturer, dpi) -> None:
-        self.manufacturer = manufacturer
+    def __init__(self, manufacturer, dpi, **throwAway):
+        super(Scanner, self).__init__(manufacturer, **throwAway)
         self.dpi = dpi
-        pass
 
     def __str__(self) -> str:
-        return self.manufacturer+" "+" "+self.dpi
+        return super(Scanner, self).__str__() + " " + self.dpi
 
 
-class MultifunctionPrinter(Printer, Scanner): 
+
+class MultifunctionPrinter(Scanner, Printer):
 
     def __init__(self, manufacturer, type, dpi):
-        self.manufacturer = manufacturer
-        self.type = type
-        self.dpi = dpi
-        pass
+        super(MultifunctionPrinter, self).__init__(manufacturer=manufacturer, type=type, dpi=dpi)
 
     def __str__(self) -> str:
-        return self.manufacturer+" "+self.type+" "+self.dpi
+        return super(MultifunctionPrinter, self).__str__()
+
+
 
 if __name__ == '__main__':
     ts6300 = MultifunctionPrinter("Canon", "Inkjet", "600")
     print(ts6300)
+
