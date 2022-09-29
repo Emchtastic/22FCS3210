@@ -81,6 +81,35 @@ class LexicalAnalyzer(private var source: String) extends Iterable[Lexeme]{
         if (!hasNext)
           return new Lexeme("eof", Token.EOF)
 
+        if(hasLetter||hasDigit||hasSpecial) {
+          var str = getChar + ""
+          nextChar
+          while((hasLetter||hasDigit||hasSpecial)&& !eof){
+            str += getChar
+            nextChar
+          }
+          str match {
+            case "public" => return new Lexeme(str, Token.PUBLIC)
+            case "abstract" => return new Lexeme(str, Token.ABSTRACT)
+            case "final" => return new Lexeme(str, Token.FINAL)
+            case "class" => return new Lexeme(str, Token.CLASS)
+            case "extends" => return new Lexeme(str, Token.EXTENDS)
+            case "implements" => return new Lexeme(str, Token.IMPLEMENTS)
+            case default => return new Lexeme(str, Token.IDENTIFIER)
+          }
+
+        }
+
+        else if (getChar == '{') {
+          val str = getChar + ""
+          nextChar
+          return new Lexeme(str, Token.OPEN_BRACKET)
+        }
+        else if (getChar == '}') {
+          val str = getChar + ""
+          nextChar
+          return new Lexeme(str, Token.CLOSE_BRACKET)
+        }
         // throw an exception if an unrecognizable symbol is found
         throw new Exception("Lexical Analyzer Error: unrecognizable symbol \"" + getChar + "\" found!")
       }
