@@ -33,8 +33,9 @@ Context Free Grammar
 does a meal include a book 
 
 YES
-S -> Aux NP VP -> does NP VP -> does a NOM VP -> does a meal VP -> does a meal Verb NP -> does a meal include NP 
--> does a meal include Det Nom -> does a meal include a Nom -> does a meal include a book
+S -> Aux NP VP -> does NP VP -> does Det NOM VP -> does a NOM VP -> does a Noun VP -> does a meal VP -> does a meal Verb NP -> 
+does a meal include NP -> does a meal include Det NOM -> does a meal include a NOM -> does a meal include a Noun
+-> does a meal include a book
 ```
 
 ### b) 
@@ -54,7 +55,7 @@ S -> NP VP -> Det NOM VP -> this NOM VP -> this Noun VP -> this flight VP
 a man read a book
 
 YES
-S -> NP VP -> Det Nom VP -> a Nom VP -> a Noun VP -> a man VP -> a man Verb NP -> a man read NP -> a man read Det NOM
+S -> NP VP -> Det NOM VP -> a NOM VP -> a Noun VP -> a man VP -> a man Verb NP -> a man read NP -> a man read Det NOM
 -> a man read a NOM -> a man read a Noun -> a man read a book
 ```
 
