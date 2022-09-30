@@ -6,7 +6,9 @@
  */
 
 import LexicalAnalyzer.{BLANKS, DIGITS, LETTERS, NEW_LINE, PUNCTUATIONS, SPECIALS}
+
 import scala.io.Source
+import scala.util.control.Breaks.break
 
 class LexicalAnalyzer(private var source: String) extends Iterable[Lexeme]{
 
@@ -78,38 +80,108 @@ class LexicalAnalyzer(private var source: String) extends Iterable[Lexeme]{
       // TODO: return the next lexeme (or Token.EOF if there isn't any lexeme left to be read)
       override def next(): Lexeme = {
 
-        if (!hasNext)
-          return new Lexeme("eof", Token.EOF)
-
-        if(hasLetter||hasDigit||hasSpecial) {
-          var str = getChar + ""
+        if(getChar == ';') {
+          var str = ""
           nextChar
-          while((hasLetter||hasDigit||hasSpecial)&& !eof){
+          nextChar
+          while((hasBlank||hasLetter||hasDigit||hasSpecial||hasPunctuation) && !eof && getChar != NEW_LINE) {
             str += getChar
             nextChar
           }
-          str match {
-            case "public" => return new Lexeme(str, Token.PUBLIC)
-            case "abstract" => return new Lexeme(str, Token.ABSTRACT)
-            case "final" => return new Lexeme(str, Token.FINAL)
-            case "class" => return new Lexeme(str, Token.CLASS)
-            case "extends" => return new Lexeme(str, Token.EXTENDS)
-            case "implements" => return new Lexeme(str, Token.IMPLEMENTS)
-            case default => return new Lexeme(str, Token.IDENTIFIER)
+          return new Lexeme(str, Token.COMMENT)
+        }
+
+        else if(getChar == '"') {
+          var str = ""
+          nextChar
+          while((hasBlank||hasLetter||hasDigit||hasSpecial||hasPunctuation) && !eof && getChar != '"') {
+            str += getChar
+            nextChar
           }
-
+          nextChar
+          return new Lexeme(str, Token.STRING)
         }
 
-        else if (getChar == '{') {
+        else if (hasDigit) {
           val str = getChar + ""
           nextChar
-          return new Lexeme(str, Token.OPEN_BRACKET)
+          return new Lexeme(str, Token.LITERAL)
         }
-        else if (getChar == '}') {
+
+        else if (hasLetter) {
           val str = getChar + ""
           nextChar
-          return new Lexeme(str, Token.CLOSE_BRACKET)
+          return new Lexeme(str, Token.IDENTIFIER)
         }
+
+        else if (hasPunctuation) {
+          val str = getChar + ""
+          nextChar
+          str match {
+            case "?" => return new Lexeme(str, Token.INPUT)
+            case "!" => return new Lexeme(str, Token.OUTPUT)
+            case "." => return new Lexeme(str, Token.DOT)
+          }
+        }
+
+        else if (hasSpecial) {
+          var str = getChar + ""
+          nextChar
+          str match {
+            case "[" => return new Lexeme(str, Token.OPEN_BRACKET)
+            case "]" => return new Lexeme(str, Token.CLOSE_BRACKET)
+            case "(" => return new Lexeme(str, Token.OPEN_PAR)
+            case ")" => return new Lexeme(str, Token.CLOSE_PAR)
+            case ">" =>
+              if (getChar == '=') {
+                str += getChar
+                nextChar
+                return new Lexeme(str, Token.GREATER_EQUAL)
+              }
+              else {
+                return new Lexeme(str, Token.GREATER)
+              }
+            case "<" =>
+              if (getChar == '=') {
+                str += getChar
+                nextChar
+                return new Lexeme(str, Token.LESS_EQUAL)
+              }
+              else {
+                return new Lexeme(str, Token.LESS)
+              }
+            case "+" => return new Lexeme(str, Token.ADDITION)
+            case "-" => return new Lexeme(str, Token.SUBTRACTION)
+            case "*" => return new Lexeme(str, Token.MULTIPLICATION)
+            case "/" => return new Lexeme(str, Token.DIVISION)
+            case "=" =>
+              if (getChar == '=') {
+                str += getChar
+                nextChar
+                return new Lexeme(str, Token.EQUAL)
+              }
+              else {
+                return new Lexeme(str, Token.ASSIGNMENT)
+              }
+            case "%" => return new Lexeme(str, Token.MODULUS)
+            case "^" => return new Lexeme(str, Token.BREAK)
+            case "$" =>
+              str += getChar
+              nextChar
+              return new Lexeme(str, Token.EO_PRG)
+          }
+        }
+/**
+        else if (getChar == '$') {
+          var str = getChar + ""
+          nextChar
+          str += getChar
+          nextChar
+          return new Lexeme(str, Token.EO_PRG)
+        }
+**/
+        else if (!hasNext)
+          return new Lexeme("eof", Token.EOF)
         // throw an exception if an unrecognizable symbol is found
         throw new Exception("Lexical Analyzer Error: unrecognizable symbol \"" + getChar + "\" found!")
       }
@@ -123,7 +195,7 @@ object LexicalAnalyzer {
   val LETTERS      = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
   val DIGITS       = "0123456789"
   val PUNCTUATIONS = ".,;:?!"
-  val SPECIALS     = "<_@#$%^&()-+='/\\[]{}|"
+  val SPECIALS     = "><_@#$%^&()-+='/\\[]{}|"
 
   def main(args: Array[String]): Unit = {
 

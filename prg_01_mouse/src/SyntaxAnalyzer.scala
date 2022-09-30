@@ -61,12 +61,18 @@ class SyntaxAnalyzer(private var source: String) {
   // TODO: mouse = { line } ´$$´
   private def parseMouse: Node = {
     val node = new Node(new Lexeme("mouse"))
+    node.add(parseLine)
+
     node
   }
 
   // TODO: line = statement | comment
   private def parseLine: Node = {
     val node = new Node(new Lexeme("line"))
+    if (getLexeme.token == Token.COMMENT){
+      node.add(new Node(getLexeme))
+      nextLexeme
+    }
     node
   }
 
