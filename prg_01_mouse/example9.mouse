@@ -1,6 +1,55 @@
 ; CS3210 - Principles of Programming Languages - Fall 2022
 ; Instructor: Thyago Mota
 ; Description: computes nCk (number of ways to select r items from a set of n items where the order of selection does not matter).
-; Student(s) Name(s):
+; Student(s) Name(s): Alex Emch
+
+; a = factorial(n), b = factorial(r), c = factorial(n - r). nCr = (a / (b * c))
+
+(
+n "n? " ? =
+r "r? " ? =
+n. r. - 0 >= ^
+"n needs to be >= r"
+)
+a 0 =
+b 0 =
+c 0 =
+
+
+n. 0 == [ a 1 = ]       ;start a
+n. 1 >= [
+     a 1 =
+     i 1 =
+     (
+       i. n. > ^        ; checks if n reached
+       a a. i. * =
+       i i. 1 + =       ; increments counter
+     )
+]
+
+r. 0 == [ b 1 = ]       ;start b
+r. 1 >= [
+     b 1 =
+     i 1 =
+     (
+       i. r. > ^        ; checks if r reached
+       b b. i. * =
+       i i. 1 + =       ; increments counter
+     )
+]
+
+n. r. - 0 == [ c 1 = ]  ;start c
+n. r. - 1 >= [
+     c 1 =
+     i 1 =
+     (
+       i. n. r. - > ^   ; checks if n - r reached
+       c c. i. * =
+       i i. 1 + =       ; increments counter
+     )
+]
+
+"nCr = "
+a. b. c. * / ! " "
 
 $$

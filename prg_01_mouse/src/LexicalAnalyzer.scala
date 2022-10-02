@@ -79,19 +79,10 @@ class LexicalAnalyzer(private var source: String) extends Iterable[Lexeme]{
 
       // TODO: return the next lexeme (or Token.EOF if there isn't any lexeme left to be read)
       override def next(): Lexeme = {
+        if (!hasNext)
+          return new Lexeme("eof", Token.EOF)
 
-        if(getChar == ';') {
-          var str = ""
-          nextChar
-          nextChar
-          while((hasBlank||hasLetter||hasDigit||hasSpecial||hasPunctuation) && !eof && getChar != NEW_LINE) {
-            str += getChar
-            nextChar
-          }
-          return new Lexeme(str, Token.COMMENT)
-        }
-
-        else if(getChar == '"') {
+        else if (getChar == '"') {
           var str = ""
           nextChar
           while((hasBlank||hasLetter||hasDigit||hasSpecial||hasPunctuation) && !eof && getChar != '"') {
@@ -118,6 +109,14 @@ class LexicalAnalyzer(private var source: String) extends Iterable[Lexeme]{
           val str = getChar + ""
           nextChar
           str match {
+            case ";" =>
+              var str = ""
+              nextChar
+              while((hasBlank||hasLetter||hasDigit||hasSpecial||hasPunctuation) && !eof && getChar != NEW_LINE) {
+                str += getChar
+                nextChar
+              }
+              return new Lexeme(str, Token.COMMENT)
             case "?" => return new Lexeme(str, Token.INPUT)
             case "!" => return new Lexeme(str, Token.OUTPUT)
             case "." => return new Lexeme(str, Token.DOT)
@@ -180,8 +179,7 @@ class LexicalAnalyzer(private var source: String) extends Iterable[Lexeme]{
           return new Lexeme(str, Token.EO_PRG)
         }
 **/
-        else if (!hasNext)
-          return new Lexeme("eof", Token.EOF)
+
         // throw an exception if an unrecognizable symbol is found
         throw new Exception("Lexical Analyzer Error: unrecognizable symbol \"" + getChar + "\" found!")
       }
@@ -195,7 +193,7 @@ object LexicalAnalyzer {
   val LETTERS      = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
   val DIGITS       = "0123456789"
   val PUNCTUATIONS = ".,;:?!"
-  val SPECIALS     = "><_@#$%^&()-+='/\\[]{}|"
+  val SPECIALS     = "><_@#$%^&()-+=*'/\\[]{}|"
 
   def main(args: Array[String]): Unit = {
 

@@ -61,8 +61,11 @@ class SyntaxAnalyzer(private var source: String) {
   // TODO: mouse = { line } ´$$´
   private def parseMouse: Node = {
     val node = new Node(new Lexeme("mouse"))
-    node.add(parseLine)
-
+    while (getLexeme != null && isLine(current.token)) {
+      node.add(parseLine)
+    }
+    //Get EO_PRG
+    node.add(new Node(getLexeme))
     node
   }
 
@@ -72,6 +75,10 @@ class SyntaxAnalyzer(private var source: String) {
     if (getLexeme.token == Token.COMMENT){
       node.add(new Node(getLexeme))
       nextLexeme
+    } else if (isStatement(getLexeme.token)){
+      node.add(parseStatement)
+    } else if (getLexeme.token == Token.CLOSE_BRACKET) {
+      parseIf
     }
     node
   }
@@ -79,18 +86,46 @@ class SyntaxAnalyzer(private var source: String) {
   // TODO: statement = ´?´ | ´!´ | string | identifier | ´=´ | literal | ´+´ | ´-´ | ´*´ | ´/´ | ´%´ | ´<´ | ´<=´ | ´>´ | ´>=´ | ´==´ | ´!=´ | ´^´ | ´.´ |  | if | while
   private def parseStatement: Node = {
     val node = new Node(new Lexeme("statement"))
+    if (getLexeme.token == Token.OPEN_BRACKET) {
+      node.add(parseIf)
+    } else if(getLexeme.token == Token.OPEN_PAR) {
+      node.add(parseWhile)
+    }
+    else
+    {
+      node.add(new Node(getLexeme))
+      nextLexeme
+    }
     node
   }
 
   // TODO: if = ´[´ { line } ´]´
   def parseIf: Node = {
     val node = new Node(new Lexeme("if"))
+    // Add OPEN_BRACKET to if lexeme
+    node.add(new Node(getLexeme))
+    nextLexeme
+    while (getLexeme.token != Token.CLOSE_BRACKET) {
+      node.add(parseLine)
+    }
+    // Add CLOSED_BRACKET to if lexeme (close out if statement)
+    node.add(new Node(getLexeme))
+    nextLexeme
     node
   }
 
   // TODO: while = ´(´ { line } ´)´
   def parseWhile: Node = {
     val node = new Node(new Lexeme("while"))
+    // Add OPEN_PAR to if lexeme
+    node.add(new Node(getLexeme))
+    nextLexeme
+    while (getLexeme.token != Token.CLOSE_PAR) {
+      node.add(parseLine)
+    }
+    // Add CLOSED_PAR to if lexeme (close out while statement)
+    node.add(new Node(getLexeme))
+    nextLexeme
     node
   }
 }

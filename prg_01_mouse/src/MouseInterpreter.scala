@@ -18,7 +18,7 @@ class MouseInterpreter(private var parseTree: Node) {
   val DEBUG = false
 
   // displays the state of the stack and the memory for debug purposes
-  def displayStackAndMemory = {
+  def displayStackAndMemory(): Unit = {
     // show stack
     print("Stack: [top] ")
     for (el <- stack)
@@ -90,7 +90,7 @@ class MouseInterpreter(private var parseTree: Node) {
     val branch = stmt.getBranches()(0)
     val lexeme = branch.lexeme
     if (DEBUG) {
-      displayStackAndMemory
+      displayStackAndMemory()
       println(s"Stmt: ${lexeme}\n")
     }
     if (lexeme.token == Token.STRING)
@@ -105,11 +105,15 @@ class MouseInterpreter(private var parseTree: Node) {
     }
     // TODO: implement the following condition according to expected semantics of the statement
     else if (lexeme.token == Token.OUTPUT) {
-
+      System.out.print(stack.pop())
     }
     // TODO: implement the following condition according to expected semantics of the statement
     else if (lexeme.token == Token.ASSIGNMENT) {
-
+      val b = stack.pop
+      var a = stack.pop
+      val name = getNameOf(a)
+      a = b
+      memory.put(name, a)
     }
     else if (lexeme.token == Token.ADDITION) {
       val b = stack.pop
@@ -138,27 +142,63 @@ class MouseInterpreter(private var parseTree: Node) {
     }
     // TODO: implement the following condition according to expected semantics of the statement
     else if (lexeme.token == Token.LESS) {
-
+      val b = stack.pop
+      val a = stack.pop
+      if (a < b) {
+        stack.push(1)
+      } else {
+        stack.push(0)
+      }
     }
     // TODO: implement the following condition according to expected semantics of the statement
     else if (lexeme.token == Token.LESS_EQUAL) {
-
+      val b = stack.pop
+      val a = stack.pop
+      if (a <= b) {
+        stack.push(1)
+      } else {
+        stack.push(0)
+      }
     }
     // TODO: implement the following condition according to expected semantics of the statement
     else if (lexeme.token == Token.GREATER) {
-
+      val b = stack.pop
+      val a = stack.pop
+      if (a > b) {
+        stack.push(1)
+      } else {
+        stack.push(0)
+      }
     }
     // TODO: implement the following condition according to expected semantics of the statement
     else if (lexeme.token == Token.GREATER_EQUAL) {
-
+      val b = stack.pop
+      val a = stack.pop
+      if (a >= b) {
+        stack.push(1)
+      } else {
+        stack.push(0)
+      }
     }
     // TODO: implement the following condition according to expected semantics of the statement
     else if (lexeme.token == Token.EQUAL) {
-
+      val b = stack.pop
+      val a = stack.pop
+      if (a == b) {
+        stack.push(1)
+      } else {
+        stack.push(0)
+      }
     }
     // TODO: implement the following condition according to expected semantics of the statement
     else if (lexeme.token == Token.DIFFERENT) {
-      
+      val b = stack.pop
+      val a = stack.pop
+      if (a != b) {
+        stack.push(1)
+      } else {
+        stack.push(0)
+      }
     }
     else if (lexeme.token == Token.DOT) {
       val address = stack.pop
