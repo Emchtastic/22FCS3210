@@ -112,8 +112,7 @@ class MouseInterpreter(private var parseTree: Node) {
       val b = stack.pop
       var a = stack.pop
       val name = getNameOf(a)
-      a = b
-      memory.put(name, a)
+      memory.put(name, b)
     }
     else if (lexeme.token == Token.ADDITION) {
       val b = stack.pop
