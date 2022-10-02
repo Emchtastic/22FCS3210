@@ -2,7 +2,7 @@
  * CS3210 - Principles of Programming Languages - Fall 2022
  * Instructor: Thyago Mota
  * Description: Prg 01 - LexicalAnalyzer (an iterable lexical analyzer)
- * Student(s) Name(s):
+ * Student(s) Name(s): Alex Emch
  */
 
 import LexicalAnalyzer.{BLANKS, DIGITS, LETTERS, NEW_LINE, PUNCTUATIONS, SPECIALS}
