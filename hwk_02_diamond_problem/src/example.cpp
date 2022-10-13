@@ -1,7 +1,7 @@
 /*
  * CS3210 - Principles of Programming Languages - Fall 2022
  * Instructor: Thyago Mota
- * Student: 
+ * Student: Alex Emch
  * Description: Homework 02 - Diamond Problem
  */
 
@@ -11,14 +11,14 @@
 using namespace std;
 
 class Device {
-    protected: 
+    protected:
         string manufacturer;
-    
-    public: 
+
+    public:
         Device(string manufacturer) {
             this->manufacturer = manufacturer;
         }
-        
+
         friend ostream& operator<<(ostream&, const Device&);
 };
 
@@ -28,16 +28,16 @@ ostream& operator<<(ostream& os, const Device& device)
     return os;
 }
 
-class Printer: public Device {
-    
-    protected:    
+class Printer: virtual public Device {
+
+    protected:
         string type;
-        
-    public: 
+
+    public:
         Printer(string manufacturer, string type): Device(manufacturer) {
             this->type = type;
         }
-        
+
         friend ostream& operator<<(ostream&, const Printer&);
 };
 
@@ -47,16 +47,16 @@ ostream& operator<<(ostream& os, const Printer& printer)
     return os;
 }
 
-class Scanner: public Device {
-    
-    protected:    
+class Scanner: virtual public Device {
+
+    protected:
         string dpi;
-        
-    public: 
+
+    public:
         Scanner(string manufacturer, string dpi): Device(manufacturer) {
             this->dpi = dpi;
         }
-        
+
         friend ostream& operator<<(ostream&, const Scanner&);
 };
 
@@ -67,9 +67,9 @@ ostream& operator<<(ostream& os, const Scanner& scanner)
 }
 
 class MultifunctionPrinter: public Printer, public Scanner {
-        
-    public: 
-        MultifunctionPrinter(string manufacturer, string type, string dpi): Printer(manufacturer, type), Scanner(manufacturer, dpi) {
+
+    public:
+        MultifunctionPrinter(string manufacturer, string type, string dpi): Printer(manufacturer, type), Scanner(manufacturer, dpi), Device(manufacturer) {
         }
         
         friend ostream& operator<<(ostream&, const MultifunctionPrinter&);

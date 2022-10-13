@@ -1,8 +1,8 @@
 /*
  * CS3210 - Principles of Programming Languages - Fall 2022
  * Instructor: Thyago Mota
- * Description: Homework 04 - Lexeme: a symbol with an optional token value
- * Student Name:
+ * Description: Activity 04 - Lexeme: a symbol with an optional token value
+ * Student(s) Name(s):
  */
 
 class Lexeme(var label: String, var token: Token.Value = null) {

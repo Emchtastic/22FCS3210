@@ -1,11 +1,11 @@
+
 /*
  * CS3210 - Principles of Programming Languages - Fall 2022
  * Instructor: Thyago Mota
  * Description: Homework 04 - LexicalAnalyzer (an iterable lexical analyzer)
- * Student Name:
+ * Student Name: Alex Emch
  */
 
-import LexicalAnalyzer.{BLANKS, DIGITS, LETTERS, NEW_LINE, PUNCTUATIONS, SPECIALS}
 import scala.io.Source
 
 class LexicalAnalyzer(private var source: String) extends Iterable[Lexeme]{
@@ -77,11 +77,50 @@ class LexicalAnalyzer(private var source: String) extends Iterable[Lexeme]{
 
       // returns the next lexeme (or Token.EOF if there isn't any lexeme left to be read)
       override def next(): Lexeme = {
-
-        if (!hasNext)
+        if (getChar == '{') {
+          val str = getChar + ""
+          nextChar
+          return new Lexeme(str, Token.BLOCK_OPEN)
+        }
+        else if (getChar == '}') {
+          val str = getChar + ""
+          nextChar
+          return new Lexeme(str, Token.BLOCK_CLOSE)
+        }
+        else if (!hasNext)
           return new Lexeme("eof", Token.EOF)
 
         // TODO: finish the implementation
+
+        if(hasLetter||hasDigit||hasSpecial) {
+          var str = getChar + ""
+          nextChar
+          while((hasLetter||hasDigit||hasSpecial)&& !eof){
+            str += getChar
+            nextChar
+          }
+          str match {
+            case "public" => return new Lexeme(str, Token.PUBLIC)
+            case "abstract" => return new Lexeme(str, Token.ABSTRACT)
+            case "final" => return new Lexeme(str, Token.FINAL)
+            case "class" => return new Lexeme(str, Token.CLASS)
+            case "extends" => return new Lexeme(str, Token.EXTENDS)
+            case "implements" => return new Lexeme(str, Token.IMPLEMENTS)
+            case default => return new Lexeme(str, Token.IDENTIFIER)
+          }
+
+        }
+        else if (hasPunctuation) {
+          var str = ""
+          while (hasPunctuation && !eof) {
+            str += getChar
+            nextChar
+          }
+          str match {
+            case "," => return new Lexeme(str, Token.COMMA)
+          }
+        }
+
 
         // throw an exception if an unrecognizable symbol is found
         throw new Exception("Lexical Analyzer Error: unrecognizable symbol found!")
