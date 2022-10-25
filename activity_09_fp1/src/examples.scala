@@ -5,10 +5,27 @@
  */
 
 object Examples {
-
+  def isPrime(a: Int): Boolean = {
+    if (2.until(a).exists(a % _ == 0)) {
+      return false
+    } else {
+      return true
+    }
+  }
   
 
-  def main(args: Array[String]): Unit = {
+  def totientPhi(m: Int): Range = {
 
+    //if (1.until(m).filter((r: Int) => coprime(m)(r)) {
+
+    //}
+
+  }
+
+
+  def main(args: Array[String]): Unit = {
+    //println(isPrime(5))
+    val lst = 2.to(100)
+    println(lst.filter(isPrime(_)))
   }
 }

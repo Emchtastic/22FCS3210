@@ -8,22 +8,35 @@ object Examples {
 
   // TODO: find all of the numbers from 1–1000 that are divisible by 8
   def lc1() = {
-
+    for {
+      el <- 1.to(1000)
+      if el % 8 == 0
+    } yield el
   }
 
   // TODO: find all of the numbers from 1–1000 that have a 6 in them
   def lc2() = {
-
+    for {
+      el <- 1.to(1000)
+      if el.toString.contains('6')
+    } yield el
   }
 
   // TODO: count the number of spaces in a (given) string
   def lc3(str: String) = {
-
-  }
+    for {
+      el <- str
+      if el == ' '
+    } yield 1
+  }.sum
 
   // TODO: remove all of the vowels in a (given) string
   def lc4(str: String) = {
-
+    val vowels = "aeiouAEIUO"
+    for {
+      el <- str
+      if !vowels.contains(el)
+    } yield el
   }
   // TODO: find all of the words in a (given) string that are less than 5 letters
   def lc5(str: String) = {
@@ -41,10 +54,10 @@ object Examples {
   }
 
   def main(args: Array[String]): Unit = {
-//    println(lc1().mkString(" "))
-//    println(lc2().mkString(" "))
-//    println(lc3("this is a string with   8 spaces!"))
-//    println(lc4("this string will have its vowels removed!"))
+    println(lc1().mkString(" "))
+    println(lc2().mkString(" "))
+    println(lc3("this is a string with   8 spaces!"))
+    println(lc4("this string will have its vowels removed!"))
 //    println(lc5("words with less than five letters in this string!").mkString(" "))
 //    println(lc6("counting the length of each word in this string!").mkString(" "))
 //    println(lc7().mkString(" "))
