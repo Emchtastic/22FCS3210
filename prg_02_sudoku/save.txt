@@ -1,0 +1,31 @@
+def allRowsValid(board: Array[Array[Int]]): Boolean = {
+    for {
+      el <- 1.to(9)
+      if getRow(board, el).sum != 45
+    } return false
+    true
+  }
+
+  // TODO #8: return whether all columns of the given board are valid sequences
+  def allColsValid(board: Array[Array[Int]]): Boolean = {
+    for {
+      el <- 1.to(9)
+      if getCol(board, el).sum != 45
+    } return false
+    true
+  }
+
+  // TODO #9: return whether all boxes of the given board are valid sequences
+  def allBoxesValid(board: Array[Array[Int]]): Boolean = {
+    for {
+      i <- 0.to(2)
+      j <- 0.to(2)
+      if getBox(board, i, j).sum != 45
+    } return false
+    true
+  }
+
+  // TODO #10: a board is valid if all of its rows, columns, and boxes are also valid
+  def isValid(board: Array[Array[Int]]): Boolean = {
+    allBoxesValid(board) && allColsValid(board) && allRowsValid(board)
+  }
