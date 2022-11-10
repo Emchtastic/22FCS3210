@@ -108,7 +108,7 @@ object Sudoku {
     val newBoard = board.clone()
     newBoard(row)(col) = d
     if (isValid(newBoard)) {
-      println(boardToString(newBoard)+"\n\n")
+      //println(boardToString(newBoard)+"\n\n")
       return newBoard
     } else
       newBoard(row)(col) = 0
@@ -136,23 +136,23 @@ object Sudoku {
       row <- 0.to(8)
       col <- 0.to(8)
       d <- 1.to(9)
-      if (newBoard(row)(col) == 0)
-    } yield getChoice(newBoard,row,col,1)//, println(boardToString(getChoice(newBoard,row,col,1)) + "\n"))
 
+      if (newBoard(row)(col) == 0)
+    } yield getChoice(newBoard,row,col,d)//, println(boardToString(getChoice(newBoard,row,col,1)) + "\n"))
   }
 
   // TODO #15: return a solution to the puzzle (null if there is no solution)
   def solve(board: Array[Array[Int]]): Array[Array[Int]] = {
-    var t = getChoices(board)
+    val t = getChoices(board)
     if (t.isEmpty) return null
     if (isSolved(t(0)))
-    t(0)
+      t(0)
     else solve(t(1))
   }
 
   def main(args: Array[String]): Unit = {
-    val board = readBoard("sudoku3.txt")
-    val sol = solve(board)
+    //val board = readBoard("sudoku3.txt")
+    val sol = solve(readBoard("sudoku2.txt"))
     println(isSolved(sol))
     println(boardToString(sol))
   }
