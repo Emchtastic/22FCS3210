@@ -5,6 +5,7 @@
  * Description: Prg 02 - Sudoku Puzzle
  */
 
+import java.security.Identity
 import scala.annotation.tailrec
 import scala.io._
 
@@ -105,55 +106,33 @@ object Sudoku {
 
   // TODO #13: return a new board configuration from the given one by setting a digit at a specific (row, col) location
   def getChoice(board: Array[Array[Int]], row: Int, col: Int, d: Int): Array[Array[Int]] = {
-    val newBoard = board.clone()
-    newBoard(row)(col) = d
-    if (isValid(newBoard)) {
-      println(boardToString(newBoard)+"\n\n")
-      return newBoard
-    } else
-      newBoard(row)(col) = 0
-      getChoice(newBoard, row, col, d+1)
-    /**
-    val newBoard = board
-    if (row >= 9) return newBoard
-    else if (col >= 9) getChoice(board, row+1, col, 0)
-    else if (newBoard(row)(col)>0) getChoice(board, row, col+1, 0)
-    else
-      newBoard(row)(col)=d+1
-      if (isValid(newBoard)) {
-        return newBoard
-      } else
-      newBoard(row)(col)=0
-      getChoice(newBoard,row,col,d+1)
-    **/
+    val choice = board.map(_.map(X=>X)) //Using map to throw each element for board into the choice. Cloning the whole board will also clone the address and overwrite the original board
+    choice(row)(col) = d
+    choice
   }
 
   // TODO #14: return all possible new board configurations from the given one
   def getChoices(board: Array[Array[Int]]): IndexedSeq[Array[Array[Int]]] = {
-    val newBoard = board.clone()
-
     for {
       row <- 0.to(8)
       col <- 0.to(8)
       d <- 1.to(9)
-      if (newBoard(row)(col) == 0)
-    } yield getChoice(newBoard,row,col,1)//, println(boardToString(getChoice(newBoard,row,col,1)) + "\n"))
+      if (board(row)(col) == 0 && isValid(getChoice(board,row,col,d))) //isValid() check to prune as we go - get rid of boards that are inValid for the solution
+    } yield getChoice(board,row,col,d)
 
   }
 
   // TODO #15: return a solution to the puzzle (null if there is no solution)
   def solve(board: Array[Array[Int]]): Array[Array[Int]] = {
-    var t = getChoices(board)
-    if (t.isEmpty) return null
-    if (isSolved(t(0)))
-    t(0)
+    val t = getChoices(board)
+    if (t.isEmpty || t(0) == null) null
+    else if (isSolved(t(0))) t(0) //maybe iterate all of t, if not solved pass t(0) to create new line up
     else solve(t(1))
   }
 
   def main(args: Array[String]): Unit = {
-    val board = readBoard("sudoku3.txt")
+    val board = readBoard("sudoku2.txt")
     val sol = solve(board)
-    println(isSolved(sol))
     println(boardToString(sol))
   }
 }
