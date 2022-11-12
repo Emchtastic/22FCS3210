@@ -13,7 +13,15 @@ object Sudoku {
 
   // TODO #1: return an 2D array of Int representing a sudoku board given a filename
   def readBoard(fileName: String): Array[Array[Int]] = {
-    val in = Source.fromFile(fileName)
+    var in = Source.fromFile(fileName)
+    val test = in.getLines().filterNot(_.isEmpty)
+    //Check if there is any funny business in the sudoku file (non-digits will not be accepted)
+    if (!test.forall(_.matches("[0-9]+"))) {
+      println("The sudoku board must only contain digits")
+      System.exit(0)
+    }
+    //Restart file to upload
+    in = Source.fromFile(fileName)
     val lines = in.getLines().filterNot(_.isEmpty)
     val board = lines.map(line => line.split("").map(_.toInt)).toArray
     in.close()
@@ -124,15 +132,25 @@ object Sudoku {
 
   // TODO #15: return a solution to the puzzle (null if there is no solution)
   def solve(board: Array[Array[Int]]): Array[Array[Int]] = {
-    val t = getChoices(board)
-    if (t.isEmpty || t(0) == null) null
-    else if (isSolved(t(0))) t(0) //maybe iterate all of t, if not solved pass t(0) to create new line up
-    else solve(t(1))
-  }
+    //Test if starting board is invalid(doesn't follow sudoku rules). Really meant as a check against bad/invalid starting boards
+    if (!isValid(board)) return null
+    //Check if passed board is already solved (preventing getChoices null seq error)
+    if (isSolved(board)) {
+      println("Board already Solved :)")
+      board
+    } else {
+      //Build the choice trees and work through them to find the SOLUTION
+      for(el <- getChoices(board)) {
+        if(isSolved(el)) return el
+        else return solve(el)
+      }
+    }
+  }.asInstanceOf[Array[Array[Int]]] //Kudos to Sean Kruse for this fix. Was returning as a Unit and had to hard press asInstanceOf 'board'
 
   def main(args: Array[String]): Unit = {
-    val board = readBoard("sudoku2.txt")
+    val board = readBoard("sudoku1.txt")
     val sol = solve(board)
-    println(boardToString(sol))
+    if (sol != null) println("Board Solution:\n"+boardToString(sol))
+    else println("There is no possible solution for this board")
   }
 }
