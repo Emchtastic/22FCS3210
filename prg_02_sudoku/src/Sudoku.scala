@@ -148,7 +148,7 @@ object Sudoku {
   }.asInstanceOf[Array[Array[Int]]] //Kudos to Sean Kruse for this fix. Was returning as a Unit and had to hard press asInstanceOf 'board'
 
   def main(args: Array[String]): Unit = {
-    val board = readBoard("sudoku1.txt")
+    val board = readBoard("sudoku3.txt")
     val sol = solve(board)
     if (sol != null) println("Board Solution:\n"+boardToString(sol))
     else println("There is no possible solution for this board")
