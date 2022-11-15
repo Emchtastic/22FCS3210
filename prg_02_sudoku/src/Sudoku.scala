@@ -5,6 +5,7 @@
  * Description: Prg 02 - Sudoku Puzzle
  */
 
+import java.security.Identity
 import scala.annotation.tailrec
 import scala.io._
 
@@ -12,7 +13,15 @@ object Sudoku {
 
   // TODO #1: return an 2D array of Int representing a sudoku board given a filename
   def readBoard(fileName: String): Array[Array[Int]] = {
-    val in = Source.fromFile(fileName)
+    var in = Source.fromFile(fileName)
+    val test = in.getLines().filterNot(_.isEmpty)
+    //Check if there is any funny business in the sudoku file (non-digits will not be accepted)
+    if (!test.forall(_.matches("[0-9]+"))) {
+      println("The sudoku board must only contain digits")
+      System.exit(0)
+    }
+    //Restart file to upload
+    in = Source.fromFile(fileName)
     val lines = in.getLines().filterNot(_.isEmpty)
     val board = lines.map(line => line.split("").map(_.toInt)).toArray
     in.close()
@@ -105,55 +114,43 @@ object Sudoku {
 
   // TODO #13: return a new board configuration from the given one by setting a digit at a specific (row, col) location
   def getChoice(board: Array[Array[Int]], row: Int, col: Int, d: Int): Array[Array[Int]] = {
-    val newBoard = board.clone()
-    newBoard(row)(col) = d
-    if (isValid(newBoard)) {
-      //println(boardToString(newBoard)+"\n\n")
-      return newBoard
-    } else
-      newBoard(row)(col) = 0
-      getChoice(newBoard, row, col, d+1)
-    /**
-    val newBoard = board
-    if (row >= 9) return newBoard
-    else if (col >= 9) getChoice(board, row+1, col, 0)
-    else if (newBoard(row)(col)>0) getChoice(board, row, col+1, 0)
-    else
-      newBoard(row)(col)=d+1
-      if (isValid(newBoard)) {
-        return newBoard
-      } else
-      newBoard(row)(col)=0
-      getChoice(newBoard,row,col,d+1)
-    **/
+    val choice = board.map(_.map(X=>X)) //Using map to throw each element for board into the choice. Cloning the whole board will also clone the address and overwrite the original board
+    choice(row)(col) = d
+    choice
   }
 
   // TODO #14: return all possible new board configurations from the given one
   def getChoices(board: Array[Array[Int]]): IndexedSeq[Array[Array[Int]]] = {
-    val newBoard = board.clone()
-
     for {
       row <- 0.to(8)
       col <- 0.to(8)
       d <- 1.to(9)
+      if (board(row)(col) == 0 && isValid(getChoice(board,row,col,d))) //isValid() check to prune as we go - get rid of boards that are inValid for the solution
+    } yield getChoice(board,row,col,d)
 
-      if (newBoard(row)(col) == 0)
-    } yield getChoice(newBoard,row,col,d)//, println(boardToString(getChoice(newBoard,row,col,1)) + "\n"))
   }
 
   // TODO #15: return a solution to the puzzle (null if there is no solution)
   def solve(board: Array[Array[Int]]): Array[Array[Int]] = {
-    val t = getChoices(board)
-    if (t.isEmpty) return null
-    if (isSolved(t(0)))
-      t(0)
-    else solve(t(1))
-  }
+    //Test if starting board is invalid(doesn't follow sudoku rules). Really meant as a check against bad/invalid starting boards
+    if (!isValid(board)) return null
+    //Check if passed board is already solved (preventing getChoices null seq error)
+    if (isSolved(board)) {
+      println("Board already Solved :)")
+      board
+    } else {
+      //Build the choice trees and work through them to find the SOLUTION
+      for(el <- getChoices(board)) {
+        if(isSolved(el)) return el
+        else return solve(el)
+      }
+    }
+  }.asInstanceOf[Array[Array[Int]]] //Kudos to Sean Kruse for this fix. Was returning as a Unit and had to hard press asInstanceOf 'board'
 
   def main(args: Array[String]): Unit = {
-    //val board = readBoard("sudoku3.txt")
-    val sol = solve(readBoard("sudoku2.txt"))
-    println(isSolved(sol))
-    println(boardToString(sol))
+    val board = readBoard("sudoku3.txt")
+    val sol = solve(board)
+    if (sol != null) println("Board Solution:\n"+boardToString(sol))
+    else println("There is no possible solution for this board")
   }
 }
