@@ -85,7 +85,7 @@ To get full grade in this assignemnt your ES should fulfill the following requir
 
 You should name your Prolog source code ***es.pl***. Submit this file through Canvas.  If working with a partner, make sure you add both of your names in a comment section in the beginning of your source code.  
 
-Rubric 
+# Rubric 
 
 +15 UI follows suggested model  
 
