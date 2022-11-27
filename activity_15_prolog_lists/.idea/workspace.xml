@@ -2,13 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a45f3cb2-86df-4f50-aa4e-3e77f45fca0c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../activity_13_prolog_unification/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../activity_13_prolog_unification/.idea/activity_13_prolog_unification.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../activity_13_prolog_unification/.idea/codeStyles/Project.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../activity_13_prolog_unification/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../activity_13_prolog_unification/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../activity_13_prolog_unification/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../activity_13_prolog_unification/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../hwk_11_prolog_lists/src/test.pl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hwk_11_prolog_lists/src/hwk11.pl" beforeDir="false" afterPath="$PROJECT_DIR$/../hwk_11_prolog_lists/src/hwk11.pl" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,7 +31,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../activity_12_prolog_basics" />
     <property name="settings.editor.selected.configurable" value="configurable.group.other" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />

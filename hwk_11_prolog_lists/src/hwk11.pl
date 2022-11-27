@@ -11,6 +11,6 @@ sum([H|T], Sum) :-
 max([X],X).
 max([H|T], Y) :-
     max(T,X),
-    (H > X -> H = Y; Y = X).
+    (H > X -> H = Y; Y = X). % If head is largest, return head, else return base case
 
 
