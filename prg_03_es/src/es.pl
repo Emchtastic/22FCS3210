@@ -4,20 +4,25 @@
 % Student(s) Name(s): Alex Emch
 
 
-:- dynamic fact/1.
+
+:- dynamic cheese/1.
+:- dynamic yes/1,no/1.
 
 is_true(Question) :-
   (
-    fact(Question) ->
-      true;
-      format('~w?~n', [Question]),
-      Answer = read(yes),
-      ( Answer -> assert(fact(Question)) )
+      yes(Question) ->  true; %check if fact is currently yes, skip question
+      no(Question) ->  false; %check if fact is currently no, skip question
+      format('~w?~n', [Question]), %fact hasn't been asked, question the user
+      read(Input),
+      ( (Input == yes) -> assert(yes(Question)); assert(no(Question)), false)
   ).
 
 cheese(parmesan)  :- is_true('Do you like strong flavor'),      is_true('Do you like hard cheese').
-cheese(blue_cheese)  :- is_true('Do you like strong flavor'),      is_true('Do you like soft cheese').
-cheese(gouda) :- is_true('Do you like soft cheese').
+cheese(blue)  :- is_true('Do you like strong flavor'),      is_true('Do you like soft cheese').
+cheese(gouda) :- is_true('Do you like soft/weak cheese').
 
 
-begin :- ( cheese(A) -> format('I think your cheese is a ~w.~n', [A]); false ).
+begin :-
+( cheese(A) -> format('I think that you would love to try ~w cheese. ~n', [A]); write('I could not find a cheese for your palate')),
+ retractall(yes(_)),
+ retractall(no(_)).
