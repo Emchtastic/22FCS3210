@@ -16,10 +16,10 @@ is_true(Question) :-
       read(Input),
       ( (Input == yes) -> assert(yes(Question)); assert(no(Question)), false)
   ).
+%make sure to exclude cheese that are not in a choice branch (mold cancels bacteria tree -> false for 'like bacteria cheeses')
+cheese(brie)  :- is_true('Do you like moldy cheeses'), is_true('Do you like cheese with a thick rind'), is_true('Do you like sweet flavors').
+cheese(camembert)  :- is_true('Do you like moldy cheeses'), is_true('Do you like cheese with a thick rind'), is_true('Do you like mushroomy flavors').
 
-cheese(parmesan)  :- is_true('Do you like strong flavor'),      is_true('Do you like hard cheese').
-cheese(blue)  :- is_true('Do you like strong flavor'),      is_true('Do you like soft cheese').
-cheese(gouda) :- is_true('Do you like soft/weak cheese').
 
 
 begin :-
